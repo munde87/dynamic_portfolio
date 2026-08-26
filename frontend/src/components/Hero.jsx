@@ -129,7 +129,7 @@ export default function Hero({ onNavigate, theme = 'dark', heroData }) {
           {/* 6. Action Buttons */}
           <motion.div
             variants={heroSequence.cta}
-            className="flex flex-wrap items-center gap-4 pt-2"
+            className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 sm:gap-4 pt-2 w-full sm:w-auto"
           >
             {/* Primary CTA Button */}
             <motion.button
@@ -137,7 +137,7 @@ export default function Hero({ onNavigate, theme = 'dark', heroData }) {
               data-cursor-text="PROJECTS"
               whileHover={{ y: -2, scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="group px-7 py-3.5 rounded-2xl text-xs sm:text-sm font-orbitron font-extrabold tracking-wider flex items-center gap-2.5 bg-spider-red text-white hover:bg-spider-red-dark shadow-spider-red transition-all duration-300 border-2 border-spider-red"
+              className="group w-full sm:w-auto px-7 py-3.5 rounded-2xl text-xs sm:text-sm font-orbitron font-extrabold tracking-wider flex items-center justify-center gap-2.5 bg-spider-red text-white hover:bg-spider-red-dark shadow-spider-red transition-all duration-300 border-2 border-spider-red"
             >
               <span className="text-white">{data.primaryCtaText}</span>
               <ArrowDownRight className="w-4 h-4 text-white transition-transform group-hover:translate-x-1 group-hover:translate-y-1" />
@@ -149,7 +149,7 @@ export default function Hero({ onNavigate, theme = 'dark', heroData }) {
               data-cursor-text="CONNECT"
               whileHover={{ y: -2, scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className={`px-7 py-3.5 rounded-2xl border-2 text-xs sm:text-sm font-orbitron font-extrabold tracking-wider flex items-center gap-2 transition-all duration-300 ${
+              className={`w-full sm:w-auto px-7 py-3.5 rounded-2xl border-2 text-xs sm:text-sm font-orbitron font-extrabold tracking-wider flex items-center justify-center gap-2 transition-all duration-300 ${
                 isDark
                   ? 'bg-spider-night-card border-spider-blue/60 text-white hover:border-spider-blue hover:bg-spider-blue/20 hover:shadow-spider-blue'
                   : 'bg-white border-spider-blue text-spider-night hover:bg-spider-blue hover:text-white shadow-md'
@@ -163,7 +163,7 @@ export default function Hero({ onNavigate, theme = 'dark', heroData }) {
           {/* 7. Social Links */}
           <motion.div
             variants={heroSequence.social}
-            className="flex flex-wrap items-center gap-4 sm:gap-6 pt-4 font-mono text-xs tracking-wider font-bold"
+            className="flex flex-wrap items-center gap-3 sm:gap-6 pt-3 font-mono text-xs tracking-wider font-bold w-full"
           >
             <motion.a
               href={data.github}

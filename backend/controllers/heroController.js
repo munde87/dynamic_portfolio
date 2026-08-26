@@ -4,9 +4,11 @@ exports.getHero = async (req, res) => {
   try {
     let hero = await Hero.findOne();
     if (!hero) {
-      hero = await Hero.create({});
-    } else if (hero.subRole && hero.subRole.includes('DSA')) {
-      hero.subRole = hero.subRole.replace('DSA • ', '').replace(' • DSA', '').replace('DSA', '');
+      hero = await Hero.create({
+        subRole: 'WEB DEVELOPER • REACT • NODE.JS • MONGODB'
+      });
+    } else if (hero.subRole !== 'WEB DEVELOPER • REACT • NODE.JS • MONGODB') {
+      hero.subRole = 'WEB DEVELOPER • REACT • NODE.JS • MONGODB';
       await hero.save();
     }
     res.json({ success: true, data: hero });

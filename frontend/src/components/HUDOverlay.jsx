@@ -5,7 +5,7 @@ import { profileData } from '../data/profile';
 import { ease } from '../utils/animations';
 
 export default function HUDOverlay({ activeSection, theme = 'dark' }) {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const isDark = theme === 'dark';
   const prefersReduced = useReducedMotion();
 
@@ -20,7 +20,7 @@ export default function HUDOverlay({ activeSection, theme = 'dark' }) {
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.7, delay: 0.8, ease: ease.cinematic }}
       aria-label="WEB-OS HUD Telemetry System"
-      className="fixed bottom-5 right-4 sm:right-6 z-30 select-none max-w-[280px] sm:max-w-xs pointer-events-auto"
+      className="fixed bottom-3 right-3 sm:bottom-5 sm:right-6 z-30 select-none max-w-[220px] sm:max-w-xs pointer-events-auto"
     >
       <div className={`p-3.5 sm:p-4 rounded-2xl border-2 backdrop-blur-xl shadow-2xl transition-all duration-300 ${
         isDark
