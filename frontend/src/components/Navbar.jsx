@@ -51,17 +51,17 @@ export default function Navbar({
   };
 
   return (
-    <header className="fixed top-0 inset-x-0 z-40 flex justify-center px-4 sm:px-8 pt-3 sm:pt-4 transition-all duration-500">
+    <header className="fixed top-0 inset-x-0 z-40 flex justify-center px-2.5 sm:px-8 pt-2 sm:pt-4 transition-all duration-500">
       <motion.nav
         initial={{ y: -30, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: ease.smooth }}
-        className={`w-full max-w-6xl rounded-2xl border transition-all duration-300 flex items-center justify-between px-5 sm:px-7 ${
-          scrolled ? 'py-2.5 sm:py-3 shadow-2xl' : 'py-3.5 sm:py-4'
+        className={`w-full max-w-6xl rounded-xl sm:rounded-2xl border transition-all duration-300 flex items-center justify-between px-3.5 sm:px-7 ${
+          scrolled ? 'py-2 sm:py-3 shadow-xl' : 'py-2.5 sm:py-4'
         } ${
           isDark
-            ? 'bg-spider-night/85 border-spider-red/30 text-white backdrop-blur-xl shadow-spider-red'
-            : 'bg-white/90 border-spider-blue/20 text-spider-night backdrop-blur-xl shadow-spider-blue'
+            ? 'bg-spider-night/90 border-spider-red/30 text-white backdrop-blur-xl shadow-spider-red'
+            : 'bg-white/95 border-spider-blue/20 text-spider-night backdrop-blur-xl shadow-spider-blue'
         }`}
       >
         {/* Left: Brand Monogram / Identity */}
@@ -171,7 +171,7 @@ export default function Navbar({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3, ease: ease.cinematic }}
-            className={`md:hidden fixed top-20 inset-x-4 p-6 rounded-3xl border shadow-2xl backdrop-blur-2xl ${
+            className={`md:hidden fixed top-16 inset-x-3 p-5 rounded-3xl border shadow-2xl backdrop-blur-2xl z-50 ${
               isDark
                 ? 'bg-spider-night/95 border-spider-red/40 text-white shadow-spider-red'
                 : 'bg-white/95 border-spider-blue/40 text-spider-night shadow-spider-blue'

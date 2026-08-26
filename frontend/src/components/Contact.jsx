@@ -287,11 +287,11 @@ export default function Contact({ theme = 'dark', heroData }) {
                 }`}>
                   <Mail className="w-5 h-5 text-spider-red" />
                 </div>
-                <div>
+                <div className="overflow-hidden min-w-0 flex-1">
                   <span className="font-mono text-[10px] tracking-wider opacity-60 uppercase block">
                     DIRECT INBOX
                   </span>
-                  <span className="font-orbitron font-bold text-sm sm:text-base tracking-wide block">
+                  <span className="font-orbitron font-bold text-xs sm:text-base tracking-wide block break-all text-spider-red">
                     {socials.email}
                   </span>
                 </div>

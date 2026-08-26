@@ -27,7 +27,7 @@ export const profileData = {
     github: "https://github.com/munde87",
     linkedin: "https://www.linkedin.com/in/shubham-munde-ba5ab4335",
     instagram: "https://www.instagram.com/smash_8767?igsi=bjVyNmgxNXVnaGd1",
-    email: "shubhammunde8767@gmail.com",
+    email: "mundeshubham002@gmail.com",
     firstPortfolio: "https://jolly-naiad-d765aa.netlify.app",
   },
 
