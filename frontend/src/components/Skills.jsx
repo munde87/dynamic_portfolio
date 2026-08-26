@@ -30,9 +30,9 @@ export default function Skills({ theme = 'dark' }) {
       }`} />
 
       {/* Hanging Spider-Man from the Top Right holding Web Strand */}
-      <div className="absolute top-0 right-4 sm:right-12 md:right-20 z-20 pointer-events-none select-none">
+      <div className="absolute top-0 right-1 sm:right-12 md:right-20 z-20 pointer-events-none select-none">
         {/* Animated Web Line Strand extending from top of page */}
-        <div className="w-[1.5px] h-20 sm:h-28 mx-auto bg-gradient-to-b from-spider-red/80 via-white to-spider-blue/80 shadow-[0_0_8px_#E62429]" />
+        <div className="w-[1.5px] h-16 sm:h-28 mx-auto bg-gradient-to-b from-spider-red/80 via-white to-spider-blue/80 shadow-[0_0_8px_#E62429]" />
         
         {/* Upside Down Hanging Spider-Man with gentle swing */}
         <motion.div
@@ -43,7 +43,7 @@ export default function Skills({ theme = 'dark' }) {
           <img
             src="/assets/spider-hanging.png"
             alt="Spider-Man Hanging Upside Down"
-            className="w-28 sm:w-36 md:w-44 drop-shadow-[0_20px_35px_rgba(230,36,41,0.5)]"
+            className="w-20 sm:w-36 md:w-44 drop-shadow-[0_20px_35px_rgba(230,36,41,0.5)]"
           />
         </motion.div>
       </div>
@@ -64,11 +64,11 @@ export default function Skills({ theme = 'dark' }) {
               ARSENAL & EXPERTISE
             </span>
 
-            <div className="flex flex-wrap items-baseline gap-4">
-              <h2 className="font-orbitron font-black text-4xl sm:text-6xl md:text-7xl uppercase tracking-tight">
+            <div className="flex flex-wrap items-baseline gap-2 sm:gap-4">
+              <h2 className="font-orbitron font-black text-3xl sm:text-6xl md:text-7xl uppercase tracking-tight">
                 TECHNICAL
               </h2>
-              <h2 className="font-orbitron font-black text-4xl sm:text-6xl md:text-7xl uppercase tracking-tight text-stroke-red hover:text-spider-red">
+              <h2 className="font-orbitron font-black text-3xl sm:text-6xl md:text-7xl uppercase tracking-tight text-stroke-red hover:text-spider-red">
                 SKILLS.
               </h2>
             </div>
@@ -77,7 +77,7 @@ export default function Skills({ theme = 'dark' }) {
           </motion.div>
 
           {/* Category Filter Chips */}
-          <motion.div variants={fadeUp} className="flex flex-wrap gap-2 max-w-md">
+          <motion.div variants={fadeUp} className="flex flex-wrap gap-2 max-w-full">
             {skillCategories.map((category) => {
               const isActive = activeCategory === category;
               return (

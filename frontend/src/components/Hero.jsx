@@ -73,11 +73,11 @@ export default function Hero({ onNavigate, theme = 'dark', heroData }) {
           </motion.div>
 
           {/* 2 & 3. Giant Hero Typography with text reveal */}
-          <div className="space-y-1 sm:space-y-2">
+          <div className="space-y-1 sm:space-y-2 max-w-full">
             <div className="overflow-hidden">
               <motion.h1
                 variants={heroSequence.headlinePrimary}
-                className={`font-orbitron font-black text-5xl sm:text-7xl md:text-8xl tracking-tight uppercase leading-none ${
+                className={`font-orbitron font-black text-4xl sm:text-7xl md:text-8xl tracking-tight uppercase leading-none break-words ${
                   isDark ? 'text-white' : 'text-spider-night'
                 }`}
               >
@@ -88,7 +88,7 @@ export default function Hero({ onNavigate, theme = 'dark', heroData }) {
             <div className="overflow-hidden">
               <motion.h1
                 variants={heroSequence.headlineSecondary}
-                className="font-orbitron font-black text-5xl sm:text-7xl md:text-8xl tracking-tight uppercase leading-none text-spider-red drop-shadow-[0_0_25px_rgba(230,36,41,0.5)]"
+                className="font-orbitron font-black text-4xl sm:text-7xl md:text-8xl tracking-tight uppercase leading-none text-spider-red drop-shadow-[0_0_25px_rgba(230,36,41,0.5)] break-words"
               >
                 {data.headline2}
               </motion.h1>

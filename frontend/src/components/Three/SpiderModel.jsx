@@ -44,7 +44,6 @@ export default function SpiderModel({
   // Play embedded animation if available
   useEffect(() => {
     if (names && names.length > 0 && actions) {
-      // Try to find an idle or standing animation first
       const idleNames = ['idle', 'stand', 'Idle', 'Stand', 'T-Pose', 'default'];
       let bestAction = null;
       
@@ -55,7 +54,6 @@ export default function SpiderModel({
         }
       }
       
-      // Fallback to first animation
       if (!bestAction) {
         bestAction = actions[names[0]];
       }
@@ -70,30 +68,30 @@ export default function SpiderModel({
     }
   }, [actions, names]);
 
-  // Frame update: Smooth cursor tracking & organic procedural idle motion
+  // Frame update: Smooth cursor/touch tracking & organic procedural idle motion
   useFrame((state, delta) => {
     if (!groupRef.current) return;
 
-    // 1. Cursor tracking with smooth lerp damping
+    // Pointer tracking with smooth lerp damping (works for mouse and touch)
     const mouseX = mouse?.current?.x ?? 0;
     const mouseY = mouse?.current?.y ?? 0;
 
-    // Subtle parallax angle limits (clamped ~15 degrees)
-    const targetRotY = rotation[1] + mouseX * 0.35;
-    const targetRotX = rotation[0] - mouseY * 0.15;
+    // Interactive rotation range (~35 degrees horizontal, 15 degrees vertical)
+    const targetRotY = rotation[1] + mouseX * 0.7;
+    const targetRotX = rotation[0] - mouseY * 0.3;
 
     groupRef.current.rotation.y = THREE.MathUtils.lerp(
       groupRef.current.rotation.y,
       targetRotY,
-      0.06
+      0.08
     );
     groupRef.current.rotation.x = THREE.MathUtils.lerp(
       groupRef.current.rotation.x,
       targetRotX,
-      0.06
+      0.08
     );
 
-    // 2. Procedural breathing / organic idle if no embedded skeleton animation
+    // Procedural breathing / organic idle if no embedded skeleton animation
     if (!names || names.length === 0) {
       const breathe = 1 + Math.sin(state.clock.elapsedTime * 2) * 0.012;
       groupRef.current.scale.set(scale * breathe, scale * breathe, scale * breathe);

@@ -42,11 +42,11 @@ export default function Projects({ theme = 'dark', heroData }) {
             WHAT I'VE BUILT
           </motion.span>
 
-          <motion.div variants={fadeUp} className="flex flex-wrap items-baseline gap-4 sm:gap-6">
-            <h2 className="font-orbitron font-black text-4xl sm:text-6xl md:text-7xl uppercase tracking-tight">
+          <motion.div variants={fadeUp} className="flex flex-wrap items-baseline gap-2 sm:gap-6">
+            <h2 className="font-orbitron font-black text-3xl sm:text-6xl md:text-7xl uppercase tracking-tight break-words">
               SELECTED
             </h2>
-            <h2 className="font-orbitron font-black text-4xl sm:text-6xl md:text-7xl uppercase tracking-tight text-stroke-blue hover:text-spider-blue">
+            <h2 className="font-orbitron font-black text-3xl sm:text-6xl md:text-7xl uppercase tracking-tight text-stroke-blue hover:text-spider-blue break-words">
               PROJECTS.
             </h2>
           </motion.div>

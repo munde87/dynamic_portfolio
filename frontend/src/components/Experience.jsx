@@ -112,11 +112,11 @@ export default function Experience({ theme = 'dark', experienceData }) {
             LIVE MOMENTS & HACKATHONS
           </motion.span>
 
-          <motion.div variants={fadeUp} className="flex flex-wrap items-baseline gap-4 sm:gap-6">
-            <h2 className="font-orbitron font-black text-4xl sm:text-6xl md:text-7xl uppercase tracking-tight">
+          <motion.div variants={fadeUp} className="flex flex-wrap items-baseline gap-2 sm:gap-6">
+            <h2 className="font-orbitron font-black text-3xl sm:text-6xl md:text-7xl uppercase tracking-tight break-words">
               HACKATHONS
             </h2>
-            <h2 className="font-orbitron font-black text-4xl sm:text-6xl md:text-7xl uppercase tracking-tight text-stroke-red hover:text-spider-red">
+            <h2 className="font-orbitron font-black text-3xl sm:text-6xl md:text-7xl uppercase tracking-tight text-stroke-red hover:text-spider-red break-words">
               & EVENTS.
             </h2>
           </motion.div>
