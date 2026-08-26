@@ -133,8 +133,8 @@ app.use((err, req, res, next) => {
   if (err instanceof multer.MulterError) {
     return res.status(400).json({ success: false, message: `Upload error: ${err.message}` })
   }
-  console.error('[SERVER ERROR]:', err.message || err)
-  res.status(500).json({ success: false, message: 'Internal server error.' })
+  console.error('[SERVER ERROR]:', err.stack || err.message || err)
+  res.status(500).json({ success: false, message: err.message || 'Internal server error.' })
 })
 
 /* ── Start server with graceful shutdown ───────────────────── */
