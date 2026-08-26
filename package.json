@@ -1,0 +1,12 @@
+{
+  "name": "shubham-munde-portfolio-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Shubham Munde Production Ready Dynamic Portfolio Workspace (React + Vite Frontend & Node.js + Express Backend)",
+  "scripts": {
+    "start": "cd backend && npm start",
+    "build": "cd frontend && npm run build",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev"
+  }
+}
