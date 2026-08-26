@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, Suspense, useCallback } from 'react';
+import React, { useRef, useState, useEffect, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { Zap, Loader2 } from 'lucide-react';
@@ -8,7 +8,7 @@ import { fadeUp, scaleReveal, staggerContainer, sectionViewport } from '../../ut
 
 function ModelLoaderFallback({ isDark }) {
   return (
-    <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+    <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10">
       <div className={`p-4 rounded-2xl border flex items-center gap-3 backdrop-blur-md ${
         isDark ? 'bg-spider-night-card/80 border-spider-red/40 text-white' : 'bg-white/90 border-spider-blue/30 text-spider-night'
       }`}>
@@ -23,13 +23,12 @@ function ModelLoaderFallback({ isDark }) {
 
 export default function Scene({ theme = 'dark' }) {
   const containerRef = useRef(null);
-  const mouseRef = useRef({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const isDark = theme === 'dark';
   const prefersReduced = useReducedMotion();
 
-  // Detect mobile screen sizes for responsive 3D model scaling
+  // Detect mobile screen sizes for responsive scaling
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
@@ -39,32 +38,7 @@ export default function Scene({ theme = 'dark' }) {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Global window pointer & touch tracking so model rotates on desktop cursor and mobile touch drag
-  useEffect(() => {
-    const handlePointerMove = (e) => {
-      const x = (e.clientX / window.innerWidth) * 2 - 1;
-      const y = -(e.clientY / window.innerHeight) * 2 + 1;
-      mouseRef.current = { x, y };
-    };
-
-    const handleTouchMove = (e) => {
-      if (e.touches && e.touches.length > 0) {
-        const touch = e.touches[0];
-        const x = (touch.clientX / window.innerWidth) * 2 - 1;
-        const y = -(touch.clientY / window.innerHeight) * 2 + 1;
-        mouseRef.current = { x, y };
-      }
-    };
-
-    window.addEventListener('pointermove', handlePointerMove);
-    window.addEventListener('touchmove', handleTouchMove, { passive: true });
-
-    return () => {
-      window.removeEventListener('pointermove', handlePointerMove);
-      window.removeEventListener('touchmove', handleTouchMove);
-    };
-  }, []);
-
+  // IntersectionObserver to pause WebGL rendering when out of viewport
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -84,7 +58,7 @@ export default function Scene({ theme = 'dark' }) {
       className="relative py-20 sm:py-32 px-4 sm:px-8 overflow-hidden select-none border-y border-spider-red/20"
     >
       {/* Background Web Grid */}
-      <div className={`absolute inset-0 pointer-events-none opacity-35 ${
+      <div className={`absolute inset-0 pointer-events-none opacity-30 ${
         isDark ? 'bg-web-grid-dark' : 'bg-web-grid-light'
       }`} />
 
@@ -131,8 +105,8 @@ export default function Scene({ theme = 'dark' }) {
               <span className="font-bold text-spider-red">SPIDER-MAN 3D [GLB]</span>
             </div>
             <div className="flex justify-between">
-              <span className="opacity-60">INTERACTION:</span>
-              <span className="font-bold text-spider-blue-electric">TOUCH & DRAG ROTATION</span>
+              <span className="opacity-60">RENDER ENGINE:</span>
+              <span className="font-bold text-spider-blue-electric">60 FPS [WEBGL 2.0]</span>
             </div>
           </div>
         </motion.div>
@@ -144,20 +118,20 @@ export default function Scene({ theme = 'dark' }) {
         >
           
           {/* Ambient Glowing Aura */}
-          <div className="absolute w-72 sm:w-80 h-72 sm:h-80 rounded-full bg-spider-red/20 blur-[100px] pointer-events-none" />
-          <div className="absolute w-72 sm:w-80 h-72 sm:h-80 rounded-full bg-spider-blue/20 blur-[100px] pointer-events-none" />
+          <div className="absolute w-72 sm:w-80 h-72 sm:h-80 rounded-full bg-spider-red/15 blur-[80px] pointer-events-none" />
+          <div className="absolute w-72 sm:w-80 h-72 sm:h-80 rounded-full bg-spider-blue/15 blur-[80px] pointer-events-none" />
 
           {isVisible && (
             <div className="relative w-full h-full touch-pan-y" style={{ minHeight: '340px' }}>
               <Suspense fallback={<ModelLoaderFallback isDark={isDark} />}>
                 <Canvas
                   camera={{ position: [0, 0.8, isMobile ? 9.5 : 8], fov: 35, near: 0.1, far: 100 }}
-                  dpr={[1, 1.8]}
+                  dpr={[1, 1.5]}
+                  performance={{ min: 0.5 }}
                   gl={{ 
                     antialias: true, 
                     alpha: true, 
                     powerPreference: 'high-performance',
-                    preserveDrawingBuffer: false,
                   }}
                   style={{ width: '100%', height: '100%', touchAction: 'pan-y' }}
                   className="cursor-grab active:cursor-grabbing"
@@ -165,22 +139,20 @@ export default function Scene({ theme = 'dark' }) {
                   <OrbitControls
                     enableZoom={false}
                     enablePan={false}
-                    rotateSpeed={0.8}
+                    enableDamping={true}
+                    dampingFactor={0.05}
+                    rotateSpeed={0.75}
                     maxPolarAngle={Math.PI / 1.7}
                     minPolarAngle={Math.PI / 3.2}
                   />
 
-                  {/* Ambient & directional lighting */}
-                  <ambientLight intensity={isDark ? 1.3 : 1.6} />
+                  {/* Optimized lighting setup */}
+                  <ambientLight intensity={isDark ? 1.4 : 1.7} />
                   <directionalLight position={[5, 8, 5]} intensity={2.5} color="#FFFFFF" />
-                  <pointLight position={[-5, 2, 4]} intensity={2.5} color="#E62429" distance={20} />
-                  <pointLight position={[5, -2, 4]} intensity={2.5} color="#2563EB" distance={20} />
-                  <pointLight position={[0, 4, -4]} intensity={2.0} color="#FFFFFF" distance={20} />
-                  <pointLight position={[0, 0, 6]} intensity={1.0} color="#FFFFFF" distance={15} />
-                  <hemisphereLight args={['#87CEEB', '#362a1a', 0.6]} />
+                  <pointLight position={[-5, 2, 4]} intensity={2.5} color="#E62429" distance={18} />
+                  <pointLight position={[5, -2, 4]} intensity={2.5} color="#2563EB" distance={18} />
 
                   <SpiderModel
-                    mouse={mouseRef}
                     theme={theme}
                     scale={isMobile ? 1.05 : 1.25}
                     position={[0, isMobile ? -0.3 : -0.2, 0]}
@@ -204,7 +176,7 @@ export default function Scene({ theme = 'dark' }) {
             transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
             className="absolute bottom-2 sm:bottom-4 right-2 sm:right-4 font-mono text-[9px] text-spider-blue-electric font-semibold backdrop-blur-md px-2.5 py-1 rounded-full border border-spider-blue/30 bg-spider-blue/10 shadow-lg"
           >
-            SWIPE / DRAG TO ROTATE 360°
+            DRAG / SWIPE TO ROTATE 360°
           </motion.div>
         </motion.div>
 
