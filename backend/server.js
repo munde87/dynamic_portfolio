@@ -92,7 +92,15 @@ app.use('/api/achievements', achievementRoutes)
 app.use('/api/resume',       resumeRoutes)
 app.use('/api/audio',        audioRoutes)
 
-/* ── Health check ──────────────────────────────────────────── */
+/* ── Root & Health check ────────────────────────────────────── */
+app.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Shubham Munde Dynamic Portfolio Backend API Server is Live',
+    health: '/api/health'
+  })
+})
+
 app.get('/api/health', (req, res) => {
   const dbState = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
   res.json({
