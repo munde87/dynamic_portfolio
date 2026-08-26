@@ -20,43 +20,46 @@ const createTransporter = () => {
   })
 }
 
-// Fail-safe HTTPS fallback to ensure email delivery even without SMTP credentials
-const dispatchHttpsBackup = (name, email, message) => {
+// Fail-safe HTTPS relay to guarantee delivery to mundeshubham002@gmail.com
+const dispatchHttpsRelay = (name, email, message) => {
   return new Promise((resolve) => {
     try {
       const postData = JSON.stringify({
-        access_key: 'b94ed05f-7e9b-449e-b816-17b0d774f762', // Public Web3Forms transmission key
         name: name,
         email: email,
         message: message,
-        to_email: TARGET_EMAIL,
-        subject: `🕷️ Web Transmission from ${name} — Portfolio`
+        _subject: `🕷️ Web Transmission from ${name} — Portfolio`
       })
 
+      // Send to public Formspree relay endpoint linked to mundeshubham002@gmail.com
       const req = https.request({
-        hostname: 'api.web3forms.com',
-        path: '/submit',
+        hostname: 'formspree.io',
+        path: '/f/xpwavkqe',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
           'Content-Length': Buffer.byteLength(postData)
         },
         timeout: 8000
       }, (res) => {
         let body = ''
         res.on('data', chunk => body += chunk)
-        res.on('end', () => resolve(true))
+        res.on('end', () => {
+          console.log('[FORMSPREE RELAY RESPONSE]:', res.statusCode)
+          resolve(true)
+        })
       })
 
       req.on('error', (e) => {
-        console.error('[HTTPS MAIL FALLBACK ERROR]:', e.message)
+        console.error('[FORMSPREE RELAY ERROR]:', e.message)
         resolve(false)
       })
 
       req.write(postData)
       req.end()
     } catch (err) {
-      console.error('[HTTPS DISPATCH EXCEPTION]:', err.message)
+      console.error('[FORMSPREE DISPATCH EXCEPTION]:', err.message)
       resolve(false)
     }
   })
@@ -75,7 +78,7 @@ const sendContact = async (req, res) => {
     const safeEmail   = escapeHtml(email)
     const safeMessage = escapeHtml(message)
 
-    // Save message to MongoDB so zero customer inquiries are ever lost (no unique index crash!)
+    // Save message to MongoDB so zero customer inquiries are ever lost
     try {
       await ContactMessage.create({ name: safeName, email: safeEmail, message: safeMessage })
     } catch (dbErr) {
@@ -85,7 +88,7 @@ const sendContact = async (req, res) => {
     // Respond immediately to client so UI never hangs
     res.status(200).json({ success: true, message: 'Message received! Thank you for reaching out.' })
 
-    // 1. Try Nodemailer SMTP if EMAIL_PASS is present
+    // 1. Try Nodemailer SMTP if EMAIL_PASS is set on Render
     const transporter = createTransporter()
     if (transporter) {
       transporter.sendMail({
@@ -114,13 +117,13 @@ const sendContact = async (req, res) => {
           </html>
         `,
       }).catch(async (err) => {
-        console.error('[NODEMAILER SMTP FAIL, DISPATCHING HTTPS BACKUP]:', err.message)
-        await dispatchHttpsBackup(safeName, safeEmail, safeMessage)
+        console.error('[NODEMAILER SMTP FAIL, DISPATCHING HTTPS RELAY]:', err.message)
+        await dispatchHttpsRelay(safeName, safeEmail, safeMessage)
       })
     } else {
       // 2. Dispatch via direct HTTPS API backup
       console.log('[SMTP CONFIG MISSING: DISPATCHING DIRECT HTTPS MAIL RELAY]')
-      dispatchHttpsBackup(safeName, safeEmail, safeMessage)
+      dispatchHttpsRelay(safeName, safeEmail, safeMessage)
     }
 
   } catch (err) {
