@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer')
 const https      = require('https')
+const ContactMessage = require('../models/ContactMessage')
 const Visitor    = require('../models/Visitor')
 const { escapeHtml } = require('../utils/helpers')
 
@@ -24,12 +25,12 @@ const dispatchHttpsBackup = (name, email, message) => {
   return new Promise((resolve) => {
     try {
       const postData = JSON.stringify({
-        access_key: 'b94ed05f-7e9b-449e-b816-17b0d774f762', // Public Formspree/Web3Forms transmission relay key
+        access_key: 'b94ed05f-7e9b-449e-b816-17b0d774f762', // Public Web3Forms transmission key
         name: name,
         email: email,
         message: message,
         to_email: TARGET_EMAIL,
-        subject: `🕷️ Portfolio Contact from ${name}`
+        subject: `🕷️ Web Transmission from ${name} — Portfolio`
       })
 
       const req = https.request({
@@ -74,9 +75,9 @@ const sendContact = async (req, res) => {
     const safeEmail   = escapeHtml(email)
     const safeMessage = escapeHtml(message)
 
-    // Save message to MongoDB so zero customer inquiries are ever lost
+    // Save message to MongoDB so zero customer inquiries are ever lost (no unique index crash!)
     try {
-      await Visitor.create({ name: safeName, email: safeEmail, message: safeMessage, thankSent: false })
+      await ContactMessage.create({ name: safeName, email: safeEmail, message: safeMessage })
     } catch (dbErr) {
       console.warn('[DB SAVE WARN]:', dbErr.message)
     }
@@ -123,7 +124,7 @@ const sendContact = async (req, res) => {
     }
 
   } catch (err) {
-    console.error(err)
+    console.error('[CONTACT CONTROLLER ERROR]:', err)
     res.status(500).json({ success: false, message: 'Failed to process message.' })
   }
 }
@@ -137,18 +138,17 @@ const thankVisitor = async (req, res) => {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
       return res.status(400).json({ success: false, message: 'Invalid email format.' })
 
-    const existing = await Visitor.findOne({ email })
-    if (existing && existing.thankSent)
-      return res.status(200).json({ success: true, message: 'Already welcomed!' })
-
     const safeName = escapeHtml(name)
 
-    // Store visitor record
-    if (existing) {
-      existing.thankSent = true
-      await existing.save()
-    } else {
-      await Visitor.create({ name: safeName, email, thankSent: true })
+    // Store visitor record without throwing duplicate key errors
+    try {
+      await Visitor.findOneAndUpdate(
+        { email },
+        { name: safeName, thankSent: true },
+        { upsert: true, new: true }
+      )
+    } catch (vErr) {
+      console.warn('[VISITOR UPSERT WARN]:', vErr.message)
     }
 
     // Respond immediately to client
