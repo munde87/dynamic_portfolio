@@ -39,7 +39,7 @@ const sendContact = async (req, res) => {
     if (transporter) {
       transporter.sendMail({
         from:    `"${safeName}" <${process.env.EMAIL_USER}>`,
-        to:      process.env.EMAIL_TO || 'shubhammunde8767@gmail.com',
+        to:      process.env.EMAIL_TO || 'mundeshubham002@gmail.com',
         replyTo: email,
         subject: `🕷️ Web Transmission from ${safeName} — Portfolio`,
         html: `

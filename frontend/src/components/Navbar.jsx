@@ -51,12 +51,12 @@ export default function Navbar({
   };
 
   return (
-    <header className="fixed top-0 inset-x-0 z-40 flex justify-center px-2.5 sm:px-8 pt-2 sm:pt-4 transition-all duration-500">
+    <header className="fixed top-0 left-0 right-0 z-50 w-full flex justify-center px-3 sm:px-8 pt-2 sm:pt-4 pointer-events-none">
       <motion.nav
         initial={{ y: -30, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: ease.smooth }}
-        className={`w-full max-w-6xl rounded-xl sm:rounded-2xl border transition-all duration-300 flex items-center justify-between px-3.5 sm:px-7 ${
+        className={`pointer-events-auto w-full max-w-6xl rounded-2xl border transition-all duration-300 flex items-center justify-between px-4 sm:px-7 ${
           scrolled ? 'py-2 sm:py-3 shadow-xl' : 'py-2.5 sm:py-4'
         } ${
           isDark
