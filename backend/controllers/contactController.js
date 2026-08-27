@@ -8,15 +8,20 @@ const TARGET_EMAIL = process.env.EMAIL_TO || 'mundeshubham002@gmail.com'
 
 const createTransporter = () => {
   const user = process.env.EMAIL_USER || 'mundeshubham002@gmail.com'
-  const pass = process.env.EMAIL_PASS
-  if (!pass) return null
+  const rawPass = process.env.EMAIL_PASS
+  if (!rawPass) return null
+
+  // Strip spaces if user pasted 16-character App Password formatted as "xxxx xxxx xxxx xxxx"
+  const pass = rawPass.replace(/\s+/g, '')
 
   return nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true, // SSL port 465 avoids port 587 STARTTLS timeout on Render cloud servers
     auth: { user, pass },
-    connectionTimeout: 8000,
-    greetingTimeout: 8000,
-    socketTimeout: 8000,
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 10000,
   })
 }
 
@@ -24,6 +29,7 @@ const createTransporter = () => {
 const dispatchHttpsRelay = (name, email, message) => {
   return new Promise((resolve) => {
     try {
+      const targetEmail = process.env.EMAIL_TO || 'mundeshubham002@gmail.com'
       const postData = JSON.stringify({
         name: name,
         email: email,
@@ -31,35 +37,39 @@ const dispatchHttpsRelay = (name, email, message) => {
         _subject: `🕷️ Web Transmission from ${name} — Portfolio`
       })
 
-      // Send to public Formspree relay endpoint linked to mundeshubham002@gmail.com
+      const path = process.env.FORMSPREE_PATH || `/ajax/${targetEmail}`
+      const hostname = process.env.FORMSPREE_PATH ? 'formspree.io' : 'formsubmit.co'
+
       const req = https.request({
-        hostname: 'formspree.io',
-        path: '/f/xpwavkqe',
+        hostname: hostname,
+        path: path,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+          'Referer': process.env.CLIENT_URL || 'https://dynamic-portfolio-bice.vercel.app/',
           'Content-Length': Buffer.byteLength(postData)
         },
-        timeout: 8000
+        timeout: 10000
       }, (res) => {
         let body = ''
         res.on('data', chunk => body += chunk)
         res.on('end', () => {
-          console.log('[FORMSPREE RELAY RESPONSE]:', res.statusCode)
+          console.log(`[HTTPS RELAY (${hostname}) RESPONSE]:`, res.statusCode, body)
           resolve(true)
         })
       })
 
       req.on('error', (e) => {
-        console.error('[FORMSPREE RELAY ERROR]:', e.message)
+        console.error('[HTTPS RELAY ERROR]:', e.message)
         resolve(false)
       })
 
       req.write(postData)
       req.end()
     } catch (err) {
-      console.error('[FORMSPREE DISPATCH EXCEPTION]:', err.message)
+      console.error('[HTTPS DISPATCH EXCEPTION]:', err.message)
       resolve(false)
     }
   })
