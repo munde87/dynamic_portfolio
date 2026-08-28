@@ -58,7 +58,7 @@ portfolio/
 │   │   │   ├── Navbar.jsx          # Mobile centered capsule header & menu drawer
 │   │   │   ├── Hero.jsx            # Headline reveal, CTA buttons, social links
 │   │   │   ├── Skills.jsx          # Arsenal grid & mobile filter chips
-│   │   │   ├── Projects.jsx        # Project showcase (BookBuddy & Tumhara Arogya)
+│   │   │   ├── Projects.jsx        # Project showcase (Acadex & Tumhara Arogya)
 │   │   │   ├── Experience.jsx      # Hackathon collage grid & full-screen Lightbox
 │   │   │   ├── Contact.jsx         # Non-blocking form & break-all email card
 │   │   │   └── HUDOverlay.jsx      # Telemetry floating widget
@@ -70,7 +70,7 @@ portfolio/
 │   ├── controllers/
 │   │   ├── contactController.js    # Non-blocking instant form API & email dispatch
 │   │   ├── heroController.js       # Auto-migration for subRole tagline
-│   │   └── projectController.js    # BookBuddy & Tumhara Arogya project endpoints
+│   │   └── projectController.js    # Acadex & Tumhara Arogya project endpoints
 │   ├── models/
 │   │   ├── ContactMessage.js       # Customer inquiry schema (no unique index)
 │   │   ├── Visitor.js              # Visitor tracking schema

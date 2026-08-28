@@ -16,7 +16,7 @@ export default function CustomCursor({ theme = 'dark' }) {
 
     const onMouseMove = (e) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
-      if (!isVisible) setIsVisible(true);
+      setIsVisible(true);
 
       const target = e.target.closest('[data-cursor-text], a, button, input, textarea, [role="button"]');
       if (target) {
@@ -32,7 +32,7 @@ export default function CustomCursor({ theme = 'dark' }) {
     const onMouseLeave = () => setIsVisible(false);
     const onMouseEnter = () => setIsVisible(true);
 
-    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mousemove', onMouseMove, { passive: true });
     document.addEventListener('mouseleave', onMouseLeave);
     document.addEventListener('mouseenter', onMouseEnter);
 
@@ -41,7 +41,7 @@ export default function CustomCursor({ theme = 'dark' }) {
       document.removeEventListener('mouseleave', onMouseLeave);
       document.removeEventListener('mouseenter', onMouseEnter);
     };
-  }, [isVisible]);
+  }, []);
 
   if (isTouch || !isVisible) return null;
 

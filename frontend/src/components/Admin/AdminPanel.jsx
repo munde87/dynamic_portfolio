@@ -2003,7 +2003,7 @@ export default function AdminPanel({ isOpen, onClose, theme = 'dark', onDataUpda
         {/* MODAL 1: ADD/EDIT PROJECT */}
         {projectModal.open && projectModal.data && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-            <div className={`max-w-lg w-full p-6 rounded-3xl border-2 space-y-4 ${isDark ? 'bg-spider-night-card border-spider-red/50 text-white' : 'bg-white border-spider-blue/40 text-black'}`}>
+            <div className={`max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 rounded-3xl border-2 space-y-4 ${isDark ? 'bg-spider-night-card border-spider-red/50 text-white' : 'bg-white border-spider-blue/40 text-black'}`}>
               <div className="flex justify-between items-center border-b pb-3 font-mono text-xs font-bold text-spider-red">
                 <span>{projectModal.isEdit ? 'EDIT PROJECT' : 'ADD NEW PROJECT'}</span>
                 <button onClick={() => setProjectModal({ open: false, isEdit: false, data: null })}><X className="w-4 h-4" /></button>
@@ -2011,31 +2011,95 @@ export default function AdminPanel({ isOpen, onClose, theme = 'dark', onDataUpda
 
               <form onSubmit={handleSaveProject} className="space-y-3 font-mono text-xs">
                 <div>
-                  <label className="block mb-1">PROJECT NAME</label>
+                  <label className="block mb-1 font-bold">PROJECT TITLE</label>
                   <input type="text" value={projectModal.data.title || ''} onChange={(e) => setProjectModal({ ...projectModal, data: { ...projectModal.data, title: e.target.value } })} required className={`w-full p-2.5 rounded-xl border ${isDark ? 'bg-spider-night border-white/20' : 'bg-slate-100 border-black/20'}`} />
                 </div>
+
                 <div>
-                  <label className="block mb-1">CATEGORY</label>
-                  <input type="text" value={projectModal.data.category || ''} onChange={(e) => setProjectModal({ ...projectModal, data: { ...projectModal.data, category: e.target.value } })} className={`w-full p-2.5 rounded-xl border ${isDark ? 'bg-spider-night border-white/20' : 'bg-slate-100 border-black/20'}`} />
+                  <label className="block mb-1 font-bold">CATEGORY</label>
+                  <input type="text" value={projectModal.data.category || ''} onChange={(e) => setProjectModal({ ...projectModal, data: { ...projectModal.data, category: e.target.value } })} placeholder="Full Stack Academic Platform" className={`w-full p-2.5 rounded-xl border ${isDark ? 'bg-spider-night border-white/20' : 'bg-slate-100 border-black/20'}`} />
                 </div>
+
                 <div>
-                  <label className="block mb-1">DESCRIPTION</label>
-                  <textarea rows={2} value={projectModal.data.description || ''} onChange={(e) => setProjectModal({ ...projectModal, data: { ...projectModal.data, description: e.target.value } })} required className={`w-full p-2.5 rounded-xl border ${isDark ? 'bg-spider-night border-white/20' : 'bg-slate-100 border-black/20'}`} />
+                  <label className="block mb-1 font-bold">DESCRIPTION</label>
+                  <textarea rows={3} value={projectModal.data.description || ''} onChange={(e) => setProjectModal({ ...projectModal, data: { ...projectModal.data, description: e.target.value } })} required className={`w-full p-2.5 rounded-xl border ${isDark ? 'bg-spider-night border-white/20' : 'bg-slate-100 border-black/20'}`} />
                 </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <label className="block mb-1">GITHUB URL</label>
-                    <input type="text" value={projectModal.data.githubUrl || ''} onChange={(e) => setProjectModal({ ...projectModal, data: { ...projectModal.data, githubUrl: e.target.value } })} className={`w-full p-2.5 rounded-xl border ${isDark ? 'bg-spider-night border-white/20' : 'bg-slate-100 border-black/20'}`} />
-                  </div>
-                  <div>
-                    <label className="block mb-1">LIVE DEMO URL</label>
-                    <input type="text" value={projectModal.data.liveUrl || ''} onChange={(e) => setProjectModal({ ...projectModal, data: { ...projectModal.data, liveUrl: e.target.value } })} className={`w-full p-2.5 rounded-xl border ${isDark ? 'bg-spider-night border-white/20' : 'bg-slate-100 border-black/20'}`} />
+
+                <div>
+                  <label className="block mb-1 font-bold">TECH STACK TAGS (COMMA SEPARATED)</label>
+                  <input
+                    type="text"
+                    value={Array.isArray(projectModal.data.tags) ? projectModal.data.tags.join(', ') : (projectModal.data.tags || '')}
+                    onChange={(e) => {
+                      const tagsArray = e.target.value.split(',').map(t => t.trim()).filter(Boolean);
+                      setProjectModal({ ...projectModal, data: { ...projectModal.data, tags: tagsArray } });
+                    }}
+                    placeholder="React, Vite, Node.js, Express, MongoDB"
+                    className={`w-full p-2.5 rounded-xl border ${isDark ? 'bg-spider-night border-white/20' : 'bg-slate-100 border-black/20'}`}
+                  />
+                </div>
+
+                {/* IMAGE UPLOAD & URL FIELD */}
+                <div className="space-y-2 border p-3 rounded-xl border-spider-red/30">
+                  <label className="block font-bold text-spider-red">PROJECT THUMBNAIL IMAGE</label>
+                  
+                  {projectModal.data.imageUrl || projectModal.data.image ? (
+                    <div className="flex items-center gap-3 mb-2">
+                      <img
+                        src={projectModal.data.imageUrl || projectModal.data.image}
+                        alt="Project Preview"
+                        className="w-20 h-14 object-cover rounded-lg border border-spider-red/40"
+                      />
+                      <span className="text-[10px] opacity-70 break-all">{projectModal.data.imageUrl || projectModal.data.image}</span>
+                    </div>
+                  ) : null}
+
+                  <div className="flex flex-col sm:flex-row gap-2 items-center">
+                    <label className="w-full sm:w-auto px-4 py-2 rounded-xl bg-spider-red text-white text-[11px] font-bold hover:bg-spider-red-dark cursor-pointer flex items-center justify-center gap-1.5 shrink-0">
+                      <Upload className="w-3.5 h-3.5" />
+                      <span>UPLOAD IMAGE FILE</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleFileUpload(e, (url) => setProjectModal({ ...projectModal, data: { ...projectModal.data, imageUrl: url, image: url } }))}
+                        className="hidden"
+                      />
+                    </label>
+                    <input
+                      type="text"
+                      value={projectModal.data.imageUrl || projectModal.data.image || ''}
+                      onChange={(e) => setProjectModal({ ...projectModal, data: { ...projectModal.data, imageUrl: e.target.value, image: e.target.value } })}
+                      placeholder="Or enter image URL (e.g. /assets/project-acadex.png)"
+                      className={`w-full p-2 rounded-xl border text-[11px] ${isDark ? 'bg-spider-night border-white/20' : 'bg-slate-100 border-black/20'}`}
+                    />
                   </div>
                 </div>
 
-                <div className="pt-2 flex justify-end gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div>
+                    <label className="block mb-1 font-bold">GITHUB URL</label>
+                    <input type="text" value={projectModal.data.githubUrl || ''} onChange={(e) => setProjectModal({ ...projectModal, data: { ...projectModal.data, githubUrl: e.target.value } })} placeholder="https://github.com/..." className={`w-full p-2.5 rounded-xl border ${isDark ? 'bg-spider-night border-white/20' : 'bg-slate-100 border-black/20'}`} />
+                  </div>
+                  <div>
+                    <label className="block mb-1 font-bold">LIVE DEMO URL</label>
+                    <input type="text" value={projectModal.data.liveUrl || ''} onChange={(e) => setProjectModal({ ...projectModal, data: { ...projectModal.data, liveUrl: e.target.value } })} placeholder="https://..." className={`w-full p-2.5 rounded-xl border ${isDark ? 'bg-spider-night border-white/20' : 'bg-slate-100 border-black/20'}`} />
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 pt-1">
+                  <input
+                    type="checkbox"
+                    id="projectFeatured"
+                    checked={Boolean(projectModal.data.featured)}
+                    onChange={(e) => setProjectModal({ ...projectModal, data: { ...projectModal.data, featured: e.target.checked } })}
+                    className="w-4 h-4 accent-spider-red rounded"
+                  />
+                  <label htmlFor="projectFeatured" className="cursor-pointer font-bold">FEATURED PROJECT ON HOMEPAGE</label>
+                </div>
+
+                <div className="pt-3 flex justify-end gap-2 border-t border-current/10">
                   <button type="button" onClick={() => setProjectModal({ open: false, isEdit: false, data: null })} className="px-4 py-2 rounded-xl border border-current/20">CANCEL</button>
-                  <button type="submit" className="px-5 py-2 rounded-xl bg-spider-red text-white font-bold">SAVE PROJECT</button>
+                  <button type="submit" className="px-5 py-2 rounded-xl bg-spider-red text-white font-bold hover:bg-spider-red-dark shadow-spider-red">SAVE PROJECT</button>
                 </div>
               </form>
             </div>

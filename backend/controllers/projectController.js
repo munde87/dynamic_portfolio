@@ -4,12 +4,12 @@ const { safeParseArray } = require('../utils/helpers')
 
 const defaultProjects = [
   {
-    title: "BookBuddy",
-    description: "An online platform designed for book lovers to rent, exchange, and sell books easily. Connects users who want to give old books a new life with readers looking for affordable books.",
-    tags: ["React", "Node.js", "Express.js", "MongoDB", "Tailwind CSS"],
-    liveUrl: "https://bookbuddy-app.vercel.app",
-    githubUrl: "https://github.com/munde87/BookBuddy",
-    imageUrl: "/assets/project-bookbuddy.jpg",
+    title: "Acadex — Everything Students Need",
+    description: "A full-stack student-focused academic resource platform designed to bring everything students need into one connected ecosystem (buy, sell, rent, exchange books, share notes, PYQs, assignments, and real-time chat).",
+    tags: ["React", "Vite", "Node.js", "Express.js", "MongoDB", "Socket.IO", "Tailwind CSS", "JWT", "Cloudinary"],
+    liveUrl: "https://acadex-amber.vercel.app/",
+    githubUrl: "https://github.com/munde87/Acadex",
+    imageUrl: "/assets/project-acadex.png",
     featured: true,
     order: 1
   },
@@ -28,7 +28,7 @@ const defaultProjects = [
 const getAll = async (req, res) => {
   try {
     let projects = await Project.find().sort({ order: 1 })
-    const oldTitles = ['EcoVidya', 'MessInfoHub']
+    const oldTitles = ['EcoVidya', 'MessInfoHub', 'BookBuddy']
     const hasOld = projects.some(p => oldTitles.includes(p.title))
     if (projects.length === 0 || hasOld) {
       await Project.deleteMany({})
@@ -53,8 +53,8 @@ const getOne = async (req, res) => {
 
 const create = async (req, res) => {
   try {
-    const { title, description, tags, liveUrl, githubUrl, featured, order } = req.body
-    const imageUrl      = req.file?.path     || ''
+    const { title, description, tags, liveUrl, githubUrl, imageUrl: bodyImageUrl, featured, order } = req.body
+    const imageUrl      = req.file?.path     || bodyImageUrl || ''
     const imagePublicId = req.file?.filename || ''
 
     const project = await Project.create({
@@ -81,7 +81,7 @@ const update = async (req, res) => {
     if (req.file && project.imagePublicId)
       await cloudinary.uploader.destroy(project.imagePublicId)
 
-    const { title, description, tags, liveUrl, githubUrl, featured, order } = req.body
+    const { title, description, tags, liveUrl, githubUrl, imageUrl: bodyImageUrl, featured, order } = req.body
 
     if (title       !== undefined) project.title       = title
     if (description !== undefined) project.description = description
@@ -93,6 +93,8 @@ const update = async (req, res) => {
     if (req.file) {
       project.imageUrl      = req.file.path
       project.imagePublicId = req.file.filename
+    } else if (bodyImageUrl !== undefined) {
+      project.imageUrl      = bodyImageUrl
     }
 
     await project.save()

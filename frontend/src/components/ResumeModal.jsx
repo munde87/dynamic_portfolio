@@ -113,7 +113,7 @@ export default function ResumeModal({ isOpen, onClose, theme = 'dark', resumeDat
             </div>
             <div className="flex items-start gap-2.5">
               <CheckCircle className="w-4 h-4 mt-0.5 opacity-80 shrink-0 text-spider-red" />
-              <span>Built BookBuddy book rental/exchange platform & Tumhara Arogya Panchakarma suite.</span>
+              <span>Built Acadex student academic ecosystem & Tumhara Arogya Panchakarma suite.</span>
             </div>
           </div>
 

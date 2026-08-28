@@ -7,28 +7,28 @@ export const projectCategories = [
     description: "Production-ready full-stack applications engineered for community sharing, transactions, and healthcare management.",
     projects: [
       {
-        id: "bookbuddy",
+        id: "acadex",
         number: "01",
-        title: "BookBuddy",
-        badge: "RENT, EXCHANGE & SELL BOOKS",
-        category: "Full Stack Platform",
-        summary: "An online platform designed for book lovers to rent, exchange, and sell books easily with sustainable book sharing.",
+        title: "Acadex — Everything Students Need",
+        badge: "STUDENT RESOURCE NETWORK",
+        category: "Full Stack Academic Platform",
+        summary: "A full-stack student-focused academic resource platform to buy, sell, rent, exchange books & share study materials.",
         description:
-          "BookBuddy is an online platform designed for book lovers to rent, exchange, and sell books easily. The platform connects users who want to give their old books a new life with those who are looking for affordable books to read. Users can list their books for sale, offer them for rent, or exchange them with other users. BookBuddy aims to make books more accessible, affordable, and sustainable by encouraging the reuse and sharing of books with a simple, user-friendly interface.",
-        tags: ["React", "Node.js", "Express.js", "MongoDB", "Tailwind CSS"],
-        liveUrl: "https://bookbuddy-app.vercel.app",
-        githubUrl: "https://github.com/munde87/BookBuddy",
-        image: "/assets/project-bookbuddy.jpg",
+          "Acadex is a full-stack student-focused academic resource platform designed to bring everything students need into one connected ecosystem. The platform allows students to buy, sell, rent, and exchange books and college-related resources, while also discovering and sharing Notes, PYQs, assignments, practical files, and other study materials. Students can create their own profiles, manage listings, upload academic resources, search and filter materials based on categories and academic details, save useful resources, post requests, and connect directly with other students through a real-time in-app chat system.",
+        tags: ["React", "Vite", "Node.js", "Express.js", "MongoDB", "Socket.IO", "Tailwind CSS", "JWT", "Cloudinary"],
+        liveUrl: "https://acadex-amber.vercel.app/",
+        githubUrl: "https://github.com/munde87/Acadex",
+        image: "/assets/project-acadex.png",
         highlights: [
-          "Book rental, sale, and direct exchange transactional workflows",
-          "User-to-user book discovery, listing management, and search indexing",
-          "RESTful API backend with MongoDB document schemas and Express routing",
-          "Sustainable book sharing UI designed for accessibility and seamless navigation"
+          "Buy, Sell, Rent & Exchange books and college academic resources",
+          "Study Materials Hub for Notes, PYQs, Assignments & Practical Files",
+          "Real-time student-to-student in-app messaging powered by Socket.IO",
+          "Student profiles, listing management, resource bookmarks, and secure authentication"
         ],
         metrics: {
-          platform: "Rent, Exchange, Sell",
-          architecture: "MERN Stack",
-          ui: "Responsive & Intuitive"
+          network: "Resource Ecosystem",
+          chat: "Real-time Socket.IO",
+          stack: "MERN + Socket.IO"
         }
       },
       {
